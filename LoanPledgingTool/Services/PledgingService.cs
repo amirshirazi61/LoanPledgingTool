@@ -16,7 +16,7 @@ namespace LoanPledgingTool.Services
     {
         List<string> GetBlaNumbers(IFormFile file);
 
-        int UpdatePledgingLoans(string[] loanIds, string userId);
+        int UpdatePledgingLoans(UpdateLoansRequest request, string userId);
     }
 
     public class PledgingService : IPledgingService
@@ -54,11 +54,11 @@ namespace LoanPledgingTool.Services
             return LoanIds.OrderBy(x => x).ToList();
         }
 
-        public int UpdatePledgingLoans(string[] loanIds, string userId)
+        public int UpdatePledgingLoans(UpdateLoansRequest request, string userId)
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("BlaNumber");
-            foreach (var loanId in loanIds)
+            foreach (var loanId in request.LoanIds)
                 dt.Rows.Add(loanId);
 
             var pd = new SqlParameter("@PLEDGINGDATA", dt)
@@ -66,12 +66,22 @@ namespace LoanPledgingTool.Services
                 TypeName = "[dbo].[PledgingLoanType]"
             };
 
-            var results = _context.Database.ExecuteSqlCommand(new RawSqlString("exec [dbo].[UpdatePledgingData] @PLEDGINGDATA, @PLEDGEDATE, @USR"),
-                 pd,
-                new SqlParameter("@PLEDGEDATE", DateTime.Now),
-                new SqlParameter("@USR", Convert.ToInt64(userId)));
+            int result;
+            if (request.AccountId == 97)
+            {
+                result = _context.Database.ExecuteSqlCommand(new RawSqlString("exec [dbo].[UpdatePledgingData] @PLEDGINGDATA, @PLEDGEDATE, @USR"),
+                     pd,
+                    new SqlParameter("@PLEDGEDATE", request.Date),
+                    new SqlParameter("@USR", Convert.ToInt64(userId)));
+            }
+            else {
+                result = _context.Database.ExecuteSqlCommand(new RawSqlString("exec [dbo].[UpdatePledgingDataNFAS] @PLEDGINGDATA, @PLEDGEDATE, @USR"),
+                                     pd,
+                                    new SqlParameter("@PLEDGEDATE", request.Date),
+                                    new SqlParameter("@USR", Convert.ToInt64(userId)));
+            }
 
-            return results;
+            return result;
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using LoanPledgingTool.Filters;
+using LoanPledgingTool.Models;
 using LoanPledgingTool.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -32,11 +34,11 @@ namespace LoanPledgingTool.Controllers
         }
 
         [HttpPost]
-        public ActionResult<int> UpdateLoans(string[] loanIds)
+        public ActionResult<int> UpdateLoans(UpdateLoansRequest request)
         {
             string userId = User.FindFirst(ClaimTypes.Name)?.Value;
-            _pledgingService.UpdatePledgingLoans(loanIds, userId);
-            return Ok(loanIds.Count());
+            _pledgingService.UpdatePledgingLoans(request, userId);
+            return Ok(request.LoanIds.Count());
         }
     }
 }

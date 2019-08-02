@@ -76,7 +76,16 @@ export function pledging(state = { isValidFile: true, checkedItems: new Map() },
                 checkedItems: selectAll(action.isChecked, action.loanIds),
                 selectAllChecked: action.isChecked
             }
-
+        case pledgingConstants.TOGGLE_DROPDOWN:
+            return {
+                ...state,
+                dropdownOpen: !state.dropdownOpen
+            }
+        case pledgingConstants.DROPDOWN_CLICK:
+            return {
+                ...state,
+                accountId: action.accountId
+            }
         default:
             return state
     }

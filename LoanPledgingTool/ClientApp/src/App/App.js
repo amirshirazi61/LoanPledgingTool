@@ -43,9 +43,8 @@ class App extends React.Component {
                 }
                 <Router history={history}>
                     <div>
-                        <PrivateRoute exact path="/" component={HomePage} />
+                        <PrivateRoute exact path="/" component={PledgingPage} />
                         <Route path="/login" component={LoginPage} />
-                        <PrivateRoute path="/pledging" component={PledgingPage} />
                     </div>
                 </Router>
             </div>

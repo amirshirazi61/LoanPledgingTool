@@ -9,7 +9,9 @@ export const pledgingActions = {
     handleViewBla,
     handleCheckBoxChange,
     handleUpdatePledging,
-    handleSelectAll
+    handleSelectAll,
+    handleDropdownToggle,
+    onDropdownClick
 };
 function handleDateChange(date) {
     return { type: pledgingConstants.DATE_CHANGE, date };
@@ -62,11 +64,11 @@ function handleViewBla(file) {
     function failure() { return { type: pledgingConstants.VIEW_BLA_FAILURE } }
 }
 
-function handleUpdatePledging(loanIds) {
+function handleUpdatePledging(loanIds, date, accountId) {
     return dispatch => {
         dispatch(request());
 
-        pledgingService.updatePledging(loanIds)
+        pledgingService.updatePledging(loanIds, date, accountId)
             .then((pledgedCount) => {
                 dispatch(success(pledgedCount));
                 dispatch(alertActions.success(`${pledgedCount} loans updated successfully!`));
@@ -84,5 +86,13 @@ function handleUpdatePledging(loanIds) {
 
 function handleSelectAll(isChecked, loanIds) {
     return { type: pledgingConstants.SELECT_ALL, isChecked: isChecked, loanIds: loanIds }
+}
+
+function handleDropdownToggle() {
+    return { type: pledgingConstants.TOGGLE_DROPDOWN }
+}
+
+function onDropdownClick(accountId) {
+    return { type: pledgingConstants.DROPDOWN_CLICK, accountId: accountId }
 }
 

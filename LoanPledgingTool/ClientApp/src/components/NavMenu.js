@@ -27,10 +27,7 @@ export default class NavMenu extends React.Component {
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
                             <ul className="navbar-nav flex-grow">
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/pledging">Pledging Tool</NavLink>
+                                    <NavLink tag={Link} className="text-dark" to="/">Pledging Tool</NavLink>
                                 </NavItem>
                             </ul>
                         </Collapse>

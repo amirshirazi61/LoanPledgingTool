@@ -23,11 +23,11 @@ function getBlaNumbers(file) {
         })
 }
 
-function updatePledging(loanIds) {
+function updatePledging(loanIds, date, accountId) {
     const requestOptions = {
         method: 'POST',
         headers: authHeader(serviceConstants.JsonContentType),
-        body: JSON.stringify(loanIds)
+        body: JSON.stringify({ loanIds, date, accountId })
     }
 
     return fetch('api/Pledging/UpdateLoans', requestOptions)
