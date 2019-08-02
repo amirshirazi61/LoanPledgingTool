@@ -9,6 +9,11 @@ ARG NUGET_SOURCES="--source https://api.nuget.org/v3/index.json"
 WORKDIR /build
 COPY . ./
 
+# we need nodejs for npm, attempt to install
+# XXX we need to not randomly download a bash file and run it, fix this eventually...
+RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
+RUN apt-get install -y nodejs
+
 # compile/package the app
 RUN dotnet publish $NUGET_SOURCES -c Release -r linux-x64 -o /out \
     && rm -f /out/NLog.config
