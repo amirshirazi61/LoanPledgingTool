@@ -10,6 +10,8 @@ WORKDIR /build
 COPY . ./
 
 # we need nodejs for npm, attempt to install
+# XXX we need to not randomly download a bash file and run it, fix this eventually...
+RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
 RUN apt-get install -y nodejs
 
 # compile/package the app
