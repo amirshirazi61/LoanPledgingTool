@@ -2,13 +2,12 @@
 import 'react-dates/lib/css/_datepicker.css';
 import { SingleDatePicker } from 'react-dates';
 import React from 'react';
-import { moment } from 'moment';
 import { connect } from 'react-redux';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, Col, FormGroup, Label, Row, CustomInput, Container, Card, CardHeader, CardBody } from 'reactstrap';
 import Layout from './../components/Layout';
 import { pledgingActions } from '../actions';
-import Checkbox from './../components/Checkbox';
-import './../app.css'
+import './../app.css';
+
 export class LoanPledging extends React.Component {
     constructor(props) {
         super(props);
@@ -110,7 +109,8 @@ export class LoanPledging extends React.Component {
                                         <CustomInput type="file" id="fileBrowser" name="customFile"
                                             label={fileName || 'choose an image file'}
                                             invalid={!isValidFile}
-                                            onChange={this.handleFileChange} />
+                                            onChange={this.handleFileChange}
+                                            accept=".xlsx" />
                                     </Col>
                                 </FormGroup>
                             </Col>
