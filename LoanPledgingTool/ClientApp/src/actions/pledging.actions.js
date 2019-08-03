@@ -29,7 +29,7 @@ function handleFileChange(file) {
     return dispatch => {
         dispatch(request({ file }));
         const ext = file.name.split('.').pop();
-        if (ext !== 'xlsx' && ext !== 'csv') {
+        if (ext !== 'xlsx') {
             dispatch(alertActions.error(`invalid file extension for file: ${file.name}`));
             dispatch(validateFileChange(false))
         }
