@@ -9,7 +9,7 @@ String region = 'us-west-2'
 // target ECR hostname
 String ecr = "739861173471.dkr.ecr.${region}.amazonaws.com"
 // ECR repository path
-String repo_short = project.replace('.', '/').toLowerCase()
+String repo_short = 'lpt'
 // full ECR repository URL
 String repo_full = "${ecr}/${repo_short}"
 // Jenkins credentials profile for interfacing with AWS (must be pre-configured in Jenkins)
