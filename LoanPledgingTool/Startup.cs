@@ -6,6 +6,7 @@ using LoanPledgingTool.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,13 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NF.Platform.Infrastructure.Logging;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace LoanPledgingTool
@@ -33,6 +37,30 @@ namespace LoanPledgingTool
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseHealthChecks("/api/ping", new HealthCheckOptions()
+            {
+                ResponseWriter = (HttpContext context, HealthReport result) =>
+                    {
+                        bool isDebug = false;
+                        #if DEBUG
+                        isDebug = true;
+                        #endif
+
+                    var json = new JObject(
+                        new JProperty("status", result.Status.ToString()),
+                        new JProperty("name", env.ApplicationName),
+                        new JProperty("buildConfiguration", isDebug ? "DEBUG" : "RELEASE"),
+                        new JProperty("runtimeEnvironment", env.EnvironmentName),
+                        new JProperty("results", new JObject(result.Entries.Select(pair =>
+                        new JProperty(pair.Key, new JObject(
+                            new JProperty("status", pair.Value.Status.ToString()),
+                            new JProperty("description", pair.Value.Description),
+                            new JProperty("data", new JObject(pair.Value.Data.Select(
+                                p => new JProperty(p.Key, p.Value))))))))));
+
+                        return context.Response.WriteAsync(json.ToString(Formatting.Indented));
+                    }
+            });
             app.UseExceptionHandler(a => a.Run(async context =>
             {
                 var exceptionFeature = context.Features.Get<IExceptionHandlerPathFeature>();
@@ -93,6 +121,7 @@ namespace LoanPledgingTool
                 options.Cookie.IsEssential = true;
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddHealthChecks().AddDbContextCheck<ApolloContext>();
             services.AddDbContext<ApolloContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ApolloDatabase")));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             // In production, the React files will be served from this directory
