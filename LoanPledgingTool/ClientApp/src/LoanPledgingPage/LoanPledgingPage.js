@@ -3,7 +3,7 @@ import 'react-dates/lib/css/_datepicker.css';
 import { SingleDatePicker } from 'react-dates';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, Col, FormGroup, Label, Row, CustomInput, Container, Card, CardHeader, CardBody } from 'reactstrap';
+import { Button, Dropdown, Input, DropdownToggle, DropdownMenu, DropdownItem, Form, Col, FormGroup, Label, Row, CustomInput, Container, Card, CardHeader, CardBody } from 'reactstrap';
 import Layout from './../components/Layout';
 import { pledgingActions } from '../actions';
 import './../app.css';
@@ -21,6 +21,7 @@ export class LoanPledging extends React.Component {
         this.handleSelectAll = this.handleSelectAll.bind(this);
         this.handleDropdownToggle = this.handleDropdownToggle.bind(this);
         this.onDropdownClick = this.onDropdownClick.bind(this);
+        this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
     handleDateChange(date) {
@@ -45,15 +46,15 @@ export class LoanPledging extends React.Component {
     handleCheckBoxChange(e) {
         const item = e.target.name;
         const isChecked = e.target.checked;
-        this.props.handleCheckBoxChange(item, isChecked);
+        this.props.handleCheckBoxChange(item, isChecked, this.props.searchValue);
     }
 
     handleUpdatePledging() {
-        this.props.handleUpdatePledging([...this.props.checkedItems.keys()], this.props.date.toDate(), this.props.accountId);
+        this.props.handleUpdatePledging([...this.props.filteredCheckedItems.keys()], this.props.date.toDate(), this.props.accountId);
     }
 
     handleSelectAll(e) {
-        this.props.handleSelectAll(e.target.checked, this.props.loanIds);
+        this.props.handleSelectAll(e.target.checked, this.props.filteredLoanIds, this.props.searchValue);
     }
 
     handleDropdownToggle() {
@@ -65,8 +66,13 @@ export class LoanPledging extends React.Component {
         this.props.onDropdownClick(+e.target.id);
     }
 
+    handleSearchChange(e) {
+        this.props.handleSearchChange(e.target.value);
+    }
+
     render() {
-        const { date, fileName, isValidFile, focused, disabled, selectAllChecked, loanIds, checkedItems, dropdownOpen, accountId } = this.props;
+        const { date, fileName, isValidFile, focused, disabled, selectAllChecked, filteredLoanIds, checkedItems, filteredCheckedItems, dropdownOpen, accountId, searchValue } = this.props;
+
         return (
             <Layout>
                 <Container>
@@ -120,15 +126,22 @@ export class LoanPledging extends React.Component {
                                 <Button onClick={this.handleUpdatePledging} disabled={!disabled}>Update Pledging Loans</Button>
                         </div>
                     </Form>
-                    {(loanIds) &&
+                    {(filteredLoanIds) &&
                         <Card>
                         <CardHeader>
-                            <CustomInput type='checkbox' id='selectAll' label='Select All' checked={selectAllChecked || false} onChange={this.handleSelectAll} />
+                            <Row>
+                                <Col sm={4}>
+                                    <CustomInput type='checkbox' id='selectAll' label='Select All' checked={selectAllChecked || false} onChange={this.handleSelectAll} />
+                                </Col>
+                                <Col sm={4}>
+                                    <Input placeholder='Search Loan ID (BLA Number)' onChange={this.handleSearchChange} value={searchValue} />
+                                </Col>
+                            </Row>
                         </CardHeader>
                         <CardBody style={{ overflowX: 'auto' }}>
                                 <div className="panel panel-default" style={{ display: 'flex', flexFlow: 'column wrap', height: '50vh' }}>
                                     {
-                                        loanIds.map(id => (
+                                    filteredLoanIds.map(id => (
                                         <div style={{ flexBasis: 'auto' }} key={id}>
                                             <CustomInput type='checkbox' id={id} name={id} checked={checkedItems.get(id) || false} label={id} onChange={this.handleCheckBoxChange} />
                                         </div>
@@ -157,7 +170,8 @@ const actionCreators = {
     handleUpdatePledging: pledgingActions.handleUpdatePledging,
     handleSelectAll: pledgingActions.handleSelectAll,
     handleDropdownToggle: pledgingActions.handleDropdownToggle,
-    onDropdownClick: pledgingActions.onDropdownClick
+    onDropdownClick: pledgingActions.onDropdownClick,
+    handleSearchChange: pledgingActions.handleSearchChange
 };
 
 const connectedLoginPage = connect(mapState, actionCreators)(LoanPledging);

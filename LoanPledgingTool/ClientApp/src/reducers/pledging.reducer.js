@@ -1,6 +1,6 @@
 ﻿import { pledgingConstants } from '../constants';
 
-export function pledging(state = { isValidFile: true, checkedItems: new Map() }, action) {
+export function pledging(state = { isValidFile: true, checkedItems: new Map(), filteredCheckedItems: new Map() }, action) {
     function deleteUnchecked(item) {
         state.checkedItems.delete(item);
         return new Map(state.checkedItems);
@@ -17,6 +17,16 @@ export function pledging(state = { isValidFile: true, checkedItems: new Map() },
             return new Map(state.checkedItems);
         }
     }
+
+    function CheckedItemChanged(searchValue) {
+        const checkedItemsArray = Array.from(state.checkedItems);
+
+        const filteredCheckedArray = searchValue ?
+            checkedItemsArray.filter(item => item[0].toLowerCase().indexOf(searchValue) !== -1) :
+            checkedItemsArray;
+        return new Map(filteredCheckedArray);
+    }
+
     switch (action.type) {
         case pledgingConstants.DATE_CHANGE:
             return {
@@ -55,14 +65,16 @@ export function pledging(state = { isValidFile: true, checkedItems: new Map() },
         case pledgingConstants.VIEW_BLA_SUCCESS:
             return {
                 ...state,
-                loanIds: action.loanIds
+                loanIds: action.loanIds,
+                filteredLoanIds: action.loanIds
             }
         case pledgingConstants.CHECKBOX_CHANGE:
             return {
                 ...state,
                 checkedItems: action.isChecked ?
                     new Map(state.checkedItems.set(action.item, action.isChecked)) :
-                    deleteUnchecked(action.item)
+                    deleteUnchecked(action.item),
+                filteredCheckedItems: CheckedItemChanged(action.searchValue)
             }
         case pledgingConstants.UPDATE_PLEDGING_SUCCESS:
             return {
@@ -74,7 +86,8 @@ export function pledging(state = { isValidFile: true, checkedItems: new Map() },
             return {
                 ...state,
                 checkedItems: selectAll(action.isChecked, action.loanIds),
-                selectAllChecked: action.isChecked
+                selectAllChecked: action.isChecked,
+                filteredCheckedItems: CheckedItemChanged(action.searchValue)
             }
         case pledgingConstants.TOGGLE_DROPDOWN:
             return {
@@ -85,6 +98,14 @@ export function pledging(state = { isValidFile: true, checkedItems: new Map() },
             return {
                 ...state,
                 accountId: action.accountId
+            }
+        case pledgingConstants.SEARCH_CHANGE:
+            return {
+                ...state,
+                filteredLoanIds: state.loanIds.filter(
+                    loanId => { return loanId.toLowerCase().indexOf(action.searchValue.toLowerCase()) !== -1; }),
+                searchValue: action.searchValue,
+                filteredCheckedItems: CheckedItemChanged(action.searchValue.toLowerCase())
             }
         default:
             return state

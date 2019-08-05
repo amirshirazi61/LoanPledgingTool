@@ -11,7 +11,8 @@ export const pledgingActions = {
     handleUpdatePledging,
     handleSelectAll,
     handleDropdownToggle,
-    onDropdownClick
+    onDropdownClick,
+    handleSearchChange
 };
 function handleDateChange(date) {
     return { type: pledgingConstants.DATE_CHANGE, date };
@@ -21,8 +22,8 @@ function handleFocusChange(focused) {
     return { type: pledgingConstants.FOCUS_CHANGE, focused };
 }
 
-function handleCheckBoxChange(item, isChecked) {
-    return { type: pledgingConstants.CHECKBOX_CHANGE, item: item, isChecked: isChecked };
+function handleCheckBoxChange(item, isChecked, searchValue) {
+    return { type: pledgingConstants.CHECKBOX_CHANGE, item: item, isChecked: isChecked, searchValue: searchValue };
 }
 
 function handleFileChange(file) {
@@ -84,8 +85,8 @@ function handleUpdatePledging(loanIds, date, accountId) {
     function failure() { return { type: pledgingConstants.UPDATE_PLEDGING_FAILURE } }
 }
 
-function handleSelectAll(isChecked, loanIds) {
-    return { type: pledgingConstants.SELECT_ALL, isChecked: isChecked, loanIds: loanIds }
+function handleSelectAll(isChecked, loanIds, searchValue) {
+    return { type: pledgingConstants.SELECT_ALL, isChecked: isChecked, loanIds: loanIds, searchValue: searchValue }
 }
 
 function handleDropdownToggle() {
@@ -96,3 +97,6 @@ function onDropdownClick(accountId) {
     return { type: pledgingConstants.DROPDOWN_CLICK, accountId: accountId }
 }
 
+function handleSearchChange(searchValue) {
+    return { type: pledgingConstants.SEARCH_CHANGE, searchValue: searchValue}
+}
