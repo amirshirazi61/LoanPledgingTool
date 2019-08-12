@@ -1,4 +1,5 @@
-﻿using LoanPledgingTool.Models;
+﻿using LoanPledgingTool.Helpers;
+using LoanPledgingTool.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Npoi.Mapper;
@@ -42,8 +43,7 @@ namespace LoanPledgingTool.Services
             List<string> LoanIds = new List<string>();
             foreach (var item in items)
             {
-                var id = item?.Value?.B;
-                if (id == null)
+                if (!Extensions.TryGetValue(item.Value, "B", out dynamic id) || id == null)
                     continue;
 
                 string idString = Convert.ToString(id);
@@ -74,7 +74,8 @@ namespace LoanPledgingTool.Services
                     new SqlParameter("@PLEDGEDATE", request.Date),
                     new SqlParameter("@USR", Convert.ToInt64(userId)));
             }
-            else {
+            else
+            {
                 result = _context.Database.ExecuteSqlCommand(new RawSqlString("exec [dbo].[UpdatePledgingDataNFAS] @PLEDGINGDATA, @PLEDGEDATE, @USR"),
                                      pd,
                                     new SqlParameter("@PLEDGEDATE", request.Date),

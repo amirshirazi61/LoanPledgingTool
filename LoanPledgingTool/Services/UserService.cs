@@ -71,7 +71,7 @@ namespace auth.Service
                 throw new AppException("Password is required");
 
             if (_context.LptUser.Any(x => x.Username == user.Username))
-                throw new AppException("Username \"" + user.Username + "\" is already taken");
+                throw new AppException($"Username \"{user.Username}\" is already taken");
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.PasswordHash = passwordHash;

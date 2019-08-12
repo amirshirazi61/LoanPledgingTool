@@ -3,9 +3,10 @@ import 'react-dates/lib/css/_datepicker.css';
 import { SingleDatePicker } from 'react-dates';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Dropdown, Input, DropdownToggle, DropdownMenu, DropdownItem, Form, Col, FormGroup, Label, Row, CustomInput, Container, Card, CardHeader, CardBody } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, Col, FormGroup, Label, Row, CustomInput, Container } from 'reactstrap';
 import Layout from './../components/Layout';
 import { pledgingActions } from '../actions';
+import { LoanIdsPage } from './../LoanIdsPage';
 import './../app.css';
 
 export class LoanPledging extends React.Component {
@@ -126,31 +127,14 @@ export class LoanPledging extends React.Component {
                                 <Button onClick={this.handleUpdatePledging} disabled={!disabled}>Update Pledging Loans</Button>
                         </div>
                     </Form>
-                    {(filteredLoanIds) &&
-                        <Card>
-                        <CardHeader>
-                            <Row>
-                                <Col sm={4}>
-                                    <CustomInput type='checkbox' id='selectAll' label='Select All' checked={selectAllChecked || false} onChange={this.handleSelectAll} />
-                                </Col>
-                                <Col sm={4}>
-                                    <Input placeholder='Search Loan ID (BLA Number)' onChange={this.handleSearchChange} value={searchValue} />
-                                </Col>
-                            </Row>
-                        </CardHeader>
-                        <CardBody style={{ overflowX: 'auto' }}>
-                                <div className="panel panel-default" style={{ display: 'flex', flexFlow: 'column wrap', height: '50vh' }}>
-                                    {
-                                    filteredLoanIds.map(id => (
-                                        <div style={{ flexBasis: 'auto' }} key={id}>
-                                            <CustomInput type='checkbox' id={id} name={id} checked={checkedItems.get(id) || false} label={id} onChange={this.handleCheckBoxChange} />
-                                        </div>
-                                        ))
-                                    }
-                                </div>
-                        </CardBody> 
-                        </Card>
-                    }
+                    {(filteredLoanIds) && <LoanIdsPage
+                        filteredLoanIds={filteredLoanIds}
+                        checkedItems={checkedItems}
+                        handleSelectAll={this.handleSelectAll}
+                        handleSearchChange={this.handleSearchChange}
+                        handleCheckBoxChange={this.handleCheckBoxChange}
+                        selectAllChecked={selectAllChecked}
+                        searchValue={searchValue} />}
                 </Container>
             </Layout>
         );
