@@ -2,11 +2,12 @@
 import 'react-dates/lib/css/_datepicker.css';
 import { SingleDatePicker } from 'react-dates';
 import React from 'react';
+import Proptypes from 'prop-types'
 import { connect } from 'react-redux';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, Col, FormGroup, Label, Row, CustomInput, Container } from 'reactstrap';
-import Layout from './../components/Layout';
-import { pledgingActions } from '../actions';
-import { LoanIdsPage } from './../LoanIdsPage';
+import Layout from '../Layout';
+import { pledgingActions } from '../../actions';
+import { LoanIdsPage } from '../LoanIdsPage';
 import './../app.css';
 
 export class LoanPledging extends React.Component {
@@ -72,7 +73,7 @@ export class LoanPledging extends React.Component {
     }
 
     render() {
-        const { date, fileName, isValidFile, focused, disabled, selectAllChecked, filteredLoanIds, checkedItems, filteredCheckedItems, dropdownOpen, accountId, searchValue } = this.props;
+        const { date, fileName, isValidFile, focused, disabled, selectAllChecked, filteredLoanIds, checkedItems, dropdownOpen, accountId, searchValue } = this.props;
 
         return (
             <Layout>
@@ -157,6 +158,10 @@ const actionCreators = {
     onDropdownClick: pledgingActions.onDropdownClick,
     handleSearchChange: pledgingActions.handleSearchChange
 };
+
+LoanPledging.propTypes = {
+    fileName: Proptypes.string
+}
 
 const connectedLoginPage = connect(mapState, actionCreators)(LoanPledging);
 export { connectedLoginPage as PledgingPage }

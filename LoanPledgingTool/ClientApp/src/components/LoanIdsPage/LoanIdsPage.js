@@ -24,6 +24,5 @@ export function LoanIdsPage(props) {
                     }
                 </div>
             </CardBody>
-        </Card>);
-    
+        </Card>);    
 }
