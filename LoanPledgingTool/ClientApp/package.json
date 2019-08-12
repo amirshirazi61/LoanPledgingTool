@@ -2,7 +2,6 @@
   "name": "loan-pledging-tool",
   "version": "0.1.0",
   "private": true,
-"homepage" : "https://dev.app.quickbridge.com:8443/lpt/ClientApp/build",
   "dependencies": {
     "bootstrap": "^4.1.3",
     "jquery": "3.3.1",
