@@ -5,7 +5,7 @@ import React from 'react';
 import Proptypes from 'prop-types'
 import { connect } from 'react-redux';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, Col, FormGroup, Label, Row, CustomInput, Container } from 'reactstrap';
-import Layout from '../Layout';
+import Layout from '../Layout/Layout';
 import { pledgingActions } from '../../actions';
 import { LoanIdsPage } from '../LoanIdsPage';
 import './../app.css';
