@@ -72,7 +72,7 @@ function handleUpdatePledging(loanIds, date, accountId) {
         pledgingService.updatePledging(loanIds, date, accountId)
             .then((pledgedCount) => {
                 dispatch(success(pledgedCount));
-                dispatch(alertActions.success(`${pledgedCount} loans updated successfully!`));
+                dispatch(alertActions.success(`Successfully Updated the loans!`));
             },
                 error => {
                     dispatch(failure(error.toString()));

@@ -38,7 +38,7 @@ namespace LoanPledgingTool.Controllers
         {
             string userId = User.FindFirst(ClaimTypes.Name)?.Value;
             _pledgingService.UpdatePledgingLoans(request, userId);
-            return Ok(request.LoanIds.Count());
+            return Ok();
         }
     }
 }
