@@ -31,8 +31,7 @@ export function pledging(state = { isValidFile: true, checkedItems: new Map(), f
         case pledgingConstants.DATE_CHANGE:
             return {
                 ...state,
-                date: action.date,
-                disabled: state.isValidFile && state.fileName !== undefined
+                date: action.date
             }
         case pledgingConstants.FILE_CHANGE:
             return {
@@ -59,8 +58,7 @@ export function pledging(state = { isValidFile: true, checkedItems: new Map(), f
                 ...state,
                 fileName: action.fileName,
                 file: action.file,
-                isValidFile: true,
-                disabled: state.date !== undefined
+                isValidFile: true
             };
         case pledgingConstants.VIEW_BLA_SUCCESS:
             return {

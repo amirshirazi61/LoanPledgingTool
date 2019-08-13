@@ -64,7 +64,6 @@ export class LoanPledging extends React.Component {
     }
 
     onDropdownClick(e) {
-        console.log(e.target.id);
         this.props.onDropdownClick(+e.target.id);
     }
 
@@ -73,7 +72,7 @@ export class LoanPledging extends React.Component {
     }
 
     render() {
-        const { date, fileName, isValidFile, focused, disabled, selectAllChecked, filteredLoanIds, checkedItems, dropdownOpen, accountId, searchValue } = this.props;
+        const { date, fileName, isValidFile, focused, selectAllChecked, filteredLoanIds, checkedItems, dropdownOpen, accountId, searchValue } = this.props;
 
         return (
             <Layout>
@@ -124,8 +123,8 @@ export class LoanPledging extends React.Component {
                             </Col>
                         </Row>
                         <div className="d-flex flex-row justify-content-between">
-                                <Button onClick={this.handleViewBla} disabled={!disabled}>View BlaNumbers</Button>
-                                <Button onClick={this.handleUpdatePledging} disabled={!disabled}>Update Pledging Loans</Button>
+                            <Button onClick={this.handleViewBla} disabled={!fileName || !isValidFile}>View BlaNumbers</Button>
+                            <Button onClick={this.handleUpdatePledging} disabled={!isValidFile || !accountId || !date}>Update Pledging Loans</Button>
                         </div>
                     </Form>
                     {(filteredLoanIds) && <LoanIdsPage
