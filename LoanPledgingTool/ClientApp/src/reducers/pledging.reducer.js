@@ -60,12 +60,34 @@ export function pledging(state = { isValidFile: true, checkedItems: new Map(), f
                 file: action.file,
                 isValidFile: true
             };
+        case pledgingConstants.VIEW_BLA_REQUEST:
+            return {
+                ...state,
+                viewing: true
+            }
         case pledgingConstants.VIEW_BLA_SUCCESS:
             return {
                 ...state,
                 loanIds: action.loanIds,
-                filteredLoanIds: action.loanIds
+                filteredLoanIds: action.loanIds,
+                viewing: false
             }
+        case pledgingConstants.VIEW_BLA_FAILURE:
+            return {
+                ...state,
+                viewing: false
+            }
+        case pledgingConstants.UPDATE_PLEDGING_REQUEST:
+            return {
+                ...state,
+                updating: true
+            }
+        case pledgingConstants.UPDATE_PLEDGING_FAILURE:
+            return {
+                ...state,
+                updating: false
+            }
+
         case pledgingConstants.CHECKBOX_CHANGE:
             return {
                 ...state,
@@ -77,7 +99,8 @@ export function pledging(state = { isValidFile: true, checkedItems: new Map(), f
         case pledgingConstants.UPDATE_PLEDGING_SUCCESS:
             return {
                 ...state,
-                pledgedCount: action.pledgedCount
+                pledgedCount: action.pledgedCount,
+                updating: false
             }
 
         case pledgingConstants.SELECT_ALL:

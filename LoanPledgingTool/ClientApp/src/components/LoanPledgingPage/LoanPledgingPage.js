@@ -8,6 +8,7 @@ import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Form, Col
 import Layout from '../Layout/Layout';
 import { pledgingActions } from '../../actions';
 import { LoanIdsPage } from '../LoanIdsPage';
+import { pledgingConstants } from './../../constants/pledging.constants';
 import './../app.css';
 
 export class LoanPledging extends React.Component {
@@ -37,6 +38,8 @@ export class LoanPledging extends React.Component {
     handleFileChange(e) {
         e.preventDefault();
         const file = e.target.files[0];
+        if (!file)
+            return;
         this.props.handleFileChange(file);
     }
 
@@ -72,7 +75,7 @@ export class LoanPledging extends React.Component {
     }
 
     render() {
-        const { date, fileName, isValidFile, focused, selectAllChecked, filteredLoanIds, checkedItems, dropdownOpen, accountId, searchValue } = this.props;
+        const { date, fileName, isValidFile, focused, selectAllChecked, filteredLoanIds, checkedItems, dropdownOpen, accountId, searchValue, viewing, updating, filteredCheckedItems } = this.props;
 
         return (
             <Layout>
@@ -123,8 +126,12 @@ export class LoanPledging extends React.Component {
                             </Col>
                         </Row>
                         <div className="d-flex flex-row justify-content-between">
-                            <Button onClick={this.handleViewBla} disabled={!fileName || !isValidFile}>View BlaNumbers</Button>
-                            <Button onClick={this.handleUpdatePledging} disabled={!isValidFile || !accountId || !date}>Update Pledging Loans</Button>
+                            <Button onClick={this.handleViewBla} disabled={!fileName || !isValidFile}>
+                                {viewing &&
+                                    <img alt="" src={pledgingConstants.IMAGE_SRC} />} View BlaNumbers</Button>
+                            <Button onClick={this.handleUpdatePledging} disabled={!filteredCheckedItems || filteredCheckedItems.size == 0 || !accountId || !date}>
+                                {updating &&
+                                    <img alt="" src={pledgingConstants.IMAGE_SRC} />} Update Pledging Loans</Button>
                         </div>
                     </Form>
                     {(filteredLoanIds) && <LoanIdsPage

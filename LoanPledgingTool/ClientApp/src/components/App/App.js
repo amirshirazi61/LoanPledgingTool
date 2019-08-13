@@ -17,15 +17,11 @@ class App extends React.Component {
             this.props.clearAlerts();
         });
 
-        this.state = {
-            visible: true
-        };
-
         this.onDismiss = this.onDismiss.bind(this);
     }
 
     onDismiss() {
-        this.setState({ visible: false });
+        this.props.clearAlerts();
     }
 
     render() {
@@ -34,7 +30,7 @@ class App extends React.Component {
             <div>
                 {alert.message &&
                 <div>
-                    <Alert color={alert.type} isOpen={this.state.visible} toggle={this.onDismiss} fade={false}>
+                    <Alert color={alert.type} isOpen={true} toggle={this.onDismiss} fade={false}>
                         {alert.message}
                     </Alert>
                 </div>
