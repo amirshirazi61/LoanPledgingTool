@@ -36,7 +36,8 @@ namespace LoanPledgingTool.Services
             {
                 SqlCommand cmd = new SqlCommand(_config.Value.StoredProcName, conn)
                 {
-                    CommandType = CommandType.StoredProcedure
+                    CommandType = CommandType.StoredProcedure,
+                    CommandTimeout = 180
                 };
 
                 SqlDataAdapter adapter = new SqlDataAdapter()
