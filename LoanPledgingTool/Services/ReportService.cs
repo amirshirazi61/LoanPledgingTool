@@ -5,12 +5,13 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LoanPledgingTool.Services
 {
     public interface IReportService
     {
-        byte[] GetFile();
+        Task<byte[]> GetFile();
     }
 
     public class ReportService : IReportService
@@ -22,34 +23,37 @@ namespace LoanPledgingTool.Services
             _config = config;
         }
 
-        public byte[] GetFile()
+        public async Task<byte[]> GetFile()
         {
-            var dt = GetData();
+            var dt = await GetData();
             string fileContent = ToCsv(dt);
             return Encoding.ASCII.GetBytes(fileContent);
         }
 
-        private DataTable GetData()
+        private Task<DataTable> GetData()
         {
             string connectionString = _config.Value.ConnectionString;
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            return Task<DataTable>.Factory.StartNew(() =>
             {
-                SqlCommand cmd = new SqlCommand(_config.Value.StoredProcName, conn)
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    CommandType = CommandType.StoredProcedure,
-                    CommandTimeout = 180
-                };
+                    SqlCommand cmd = new SqlCommand(_config.Value.StoredProcName, conn)
+                    {
+                        CommandType = CommandType.StoredProcedure,
+                        CommandTimeout = 180
+                    };
 
-                SqlDataAdapter adapter = new SqlDataAdapter()
-                {
-                    SelectCommand = cmd
-                };
+                    SqlDataAdapter adapter = new SqlDataAdapter()
+                    {
+                        SelectCommand = cmd
+                    };
 
-                DataTable dt = new DataTable();
-                adapter.Fill(dt);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
 
-                return dt;
-            }
+                    return dt;
+                }
+            });
         }
 
         private string ToCsv(DataTable dt)

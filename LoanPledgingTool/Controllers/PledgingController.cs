@@ -35,9 +35,9 @@ namespace LoanPledgingTool.Controllers
         }
 
         [HttpGet]
-        public FileContentResult Getfile()
+        public async Task<FileContentResult> Getfile()
         {
-            byte[] bytes = _reportService.GetFile();
+            byte[] bytes = await _reportService.GetFile();
             return File(bytes, "application/octet-stream");
         }
 
