@@ -154,8 +154,10 @@ namespace LoanPledgingTool
                 };
             });
 
+            services.Configure<ReportConfig>(Configuration.GetSection("ssis.config"));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPledgingService, PledgingService>();
+            services.AddScoped<IReportService, ReportService>();
         }
     }
 }

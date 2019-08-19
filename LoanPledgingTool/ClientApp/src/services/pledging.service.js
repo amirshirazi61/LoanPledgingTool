@@ -4,7 +4,8 @@ import { serviceConstants } from './serviceConstants';
 
 export const pledgingService = {
     getBlaNumbers,
-    updatePledging
+    updatePledging,
+    getFile
 }
 
 function getBlaNumbers(file) {
@@ -35,6 +36,29 @@ function updatePledging(loanIds, date, accountId) {
         .then(response => {
             return response;
         })
+}
+
+function getFile() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader(serviceConstants.JsonContentType),
+    }
+
+    return fetch('api/Pledging/GetFile', requestOptions)
+        .then(response => response.blob()
+            .then(blob => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        userService.logout();
+                        window.location.reload(true);
+                    }
+
+                    const error = response.Message || response.statusText || response.status;
+                    return Promise.reject(error);
+                }
+
+                return blob;
+            }));
 }
 
 function handleResponse(response) {

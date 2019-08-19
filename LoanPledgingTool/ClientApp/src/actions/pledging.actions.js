@@ -12,7 +12,8 @@ export const pledgingActions = {
     handleSelectAll,
     handleDropdownToggle,
     onDropdownClick,
-    handleSearchChange
+    handleSearchChange,
+    getFile
 };
 function handleDateChange(date) {
     return { type: pledgingConstants.DATE_CHANGE, date };
@@ -99,4 +100,23 @@ function onDropdownClick(accountId) {
 
 function handleSearchChange(searchValue) {
     return { type: pledgingConstants.SEARCH_CHANGE, searchValue: searchValue}
+}
+
+function getFile(anchor) {
+    return dispatch => {
+        dispatch({ type: pledgingConstants.FILE_DOWNLOAD_REQUEST });
+        pledgingService.getFile()
+            .then(blob => {
+                dispatch(alertActions.success(`Successfully downloaded the file.`));
+                dispatch(success(blob));
+                anchor.current.click();
+            },
+                error => {
+                    dispatch(alertActions.error(error.toString()));
+                    dispatch({ type: pledgingConstants.FILE_DOWNLOAD_FAILURE });
+                });
+    };
+
+
+    function success(blob) { return { type: pledgingConstants.FILE_DOWNLOAD_SUCCESS, blob: blob } }
 }

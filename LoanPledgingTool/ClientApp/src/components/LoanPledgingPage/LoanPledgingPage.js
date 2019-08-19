@@ -14,6 +14,7 @@ import './../app.css';
 export class LoanPledging extends React.Component {
     constructor(props) {
         super(props);
+        this.anchor = React.createRef();
 
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleFocusChange = this.handleFocusChange.bind(this);
@@ -25,6 +26,7 @@ export class LoanPledging extends React.Component {
         this.handleDropdownToggle = this.handleDropdownToggle.bind(this);
         this.onDropdownClick = this.onDropdownClick.bind(this);
         this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.getFile = this.getFile.bind(this);
     }
 
     handleDateChange(date) {
@@ -74,11 +76,16 @@ export class LoanPledging extends React.Component {
         this.props.handleSearchChange(e.target.value);
     }
 
-    render() {
-        const { date, fileName, isValidFile, focused, selectAllChecked, filteredLoanIds, checkedItems, dropdownOpen, accountId, searchValue, viewing, updating, filteredCheckedItems } = this.props;
+    getFile() {
+        this.props.getFile(this.anchor);
+    }
 
+    render() {
+        const { date, fileName, isValidFile, focused, selectAllChecked, filteredLoanIds, checkedItems,
+            dropdownOpen, accountId, searchValue, viewing, updating, filteredCheckedItems, blob, downloading } = this.props;
         return (
             <Layout>
+                {blob && <a style={{ display: 'none' }} href={blob && window.URL.createObjectURL(blob)} download={'report.csv'} ref={this.anchor} />}
                 <Container>
                     <Form className="mb-2">
                         <Row>
@@ -126,12 +133,15 @@ export class LoanPledging extends React.Component {
                             </Col>
                         </Row>
                         <div className="d-flex flex-row justify-content-between">
-                            <Button onClick={this.handleViewBla} disabled={!fileName || !isValidFile}>
+                            <Button onClick={this.handleViewBla} disabled={!fileName || !isValidFile || viewing}>
                                 {viewing &&
                                     <img alt="" src={pledgingConstants.IMAGE_SRC} />} View BlaNumbers</Button>
-                            <Button onClick={this.handleUpdatePledging} disabled={!filteredCheckedItems || filteredCheckedItems.size == 0 || !accountId || !date}>
+                            <Button onClick={this.handleUpdatePledging} disabled={!filteredCheckedItems || filteredCheckedItems.size === 0 || !accountId || !date || updating}>
                                 {updating &&
                                     <img alt="" src={pledgingConstants.IMAGE_SRC} />} Update Pledging Loans</Button>
+                            <Button onClick={this.getFile} disabled={downloading}>
+                                {downloading &&
+                                <img alt="" src={pledgingConstants.IMAGE_SRC} />} Download Report</Button>
                         </div>
                     </Form>
                     {(filteredLoanIds) && <LoanIdsPage
@@ -162,7 +172,8 @@ const actionCreators = {
     handleSelectAll: pledgingActions.handleSelectAll,
     handleDropdownToggle: pledgingActions.handleDropdownToggle,
     onDropdownClick: pledgingActions.onDropdownClick,
-    handleSearchChange: pledgingActions.handleSearchChange
+    handleSearchChange: pledgingActions.handleSearchChange,
+    getFile: pledgingActions.getFile
 };
 
 LoanPledging.propTypes = {

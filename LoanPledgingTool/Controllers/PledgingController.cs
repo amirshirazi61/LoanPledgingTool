@@ -3,10 +3,9 @@ using LoanPledgingTool.Models;
 using LoanPledgingTool.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace LoanPledgingTool.Controllers
 {
@@ -17,11 +16,13 @@ namespace LoanPledgingTool.Controllers
     [Logging]
     public class PledgingController : ControllerBase
     {
-        private IPledgingService _pledgingService;
+        private readonly IPledgingService _pledgingService;
+        private readonly IReportService _reportService;
 
-        public PledgingController(IPledgingService pledgingService)
+        public PledgingController(IPledgingService pledgingService, IReportService reportService)
         {
             _pledgingService = pledgingService;
+            _reportService = reportService;
         }
 
         public ActionResult<List<string>> GetBlaNumbers()
@@ -31,6 +32,13 @@ namespace LoanPledgingTool.Controllers
                 return Ok();
 
             return Ok(_pledgingService.GetBlaNumbers(files[0]));
+        }
+
+        [HttpGet]
+        public FileContentResult Getfile()
+        {
+            byte[] bytes = _reportService.GetFile();
+            return File(bytes, "application/octet-stream");
         }
 
         [HttpPost]

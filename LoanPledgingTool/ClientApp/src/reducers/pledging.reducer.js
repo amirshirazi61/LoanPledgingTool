@@ -128,6 +128,22 @@ export function pledging(state = { isValidFile: true, checkedItems: new Map(), f
                 searchValue: action.searchValue,
                 filteredCheckedItems: CheckedItemChanged(action.searchValue.toLowerCase())
             }
+        case pledgingConstants.FILE_DOWNLOAD_REQUEST:
+            return {
+                ...state,
+                downloading: true
+            }
+        case pledgingConstants.FILE_DOWNLOAD_FAILURE:
+            return {
+                ...state,
+                downloading: false
+            }
+        case pledgingConstants.FILE_DOWNLOAD_SUCCESS:
+            return {
+                ...state,
+                downloading: false,
+                blob: action.blob
+            }
         default:
             return state
     }

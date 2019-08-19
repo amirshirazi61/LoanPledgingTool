@@ -1,3 +1,7 @@
 ﻿.custom-file label {
     overflow: hidden;
 }
+
+button:disabled {
+    cursor: not-allowed;
+}
