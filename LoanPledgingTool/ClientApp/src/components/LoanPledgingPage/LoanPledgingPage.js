@@ -141,7 +141,7 @@ export class LoanPledging extends React.Component {
                                     <img alt="" src={pledgingConstants.IMAGE_SRC} />} Update Pledging Loans</Button>
                             <Button onClick={this.getFile} disabled={downloading}>
                                 {downloading &&
-                                <img alt="" src={pledgingConstants.IMAGE_SRC} />} Download Report</Button>
+                                    <img alt="" src={pledgingConstants.IMAGE_SRC} />} QB Data Tape</Button>
                         </div>
                     </Form>
                     {(filteredLoanIds) && <LoanIdsPage
