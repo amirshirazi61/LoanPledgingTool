@@ -19,8 +19,7 @@ RUN dotnet publish $NUGET_SOURCES -c Release -r linux-x64 -o /out \
     && rm -f /out/NLog.config
 
 # actual target image
-#FROM 739861173471.dkr.ecr.us-west-2.amazonaws.com/baseimage/core:stable
-FROM 739861173471.dkr.ecr.us-west-2.amazonaws.com/baseimage/core:13
+FROM 739861173471.dkr.ecr.us-west-2.amazonaws.com/baseimage/core:stable
 
 # metadata
 MAINTAINER Matt Sheppard <msheppard@nationalfunding.com>
