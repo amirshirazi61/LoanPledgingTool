@@ -32,5 +32,8 @@ ENV APPLICATION=$app
 # copy app from build-env
 COPY --from=build-env /out .
 
+# add custom nginx config
+COPY .docker/nginx-lpt.conf /etc/nginx/conf.d/lpt.conf
+
 # default command
 CMD ./$APPLICATION
