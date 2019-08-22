@@ -32,12 +32,7 @@ ARG app="undefined"
 ENV APPLICATION=$app
 
 # copy app from build-env
-RUN echo "current directory `pwd`"
 COPY --from=build-env /out .
-
-WORKDIR /out/ClientApp
-RUN npm install
-WORKDIR /build
 
 # add custom nginx config
 COPY .docker/nginx-lpt.conf /etc/nginx/conf.d/lpt.conf
