@@ -9,7 +9,7 @@ ARG NUGET_SOURCES="--source https://api.nuget.org/v3/index.json"
 WORKDIR /build
 COPY . ./
 
-ENV NODE_ENV=production
+#ENV NODE_ENV=production
 
 # we need nodejs for npm, attempt to install
 # XXX we need to not randomly download a bash file and run it, fix this eventually...
@@ -19,10 +19,6 @@ RUN apt-get install -y nodejs
 # compile/package the app
 RUN dotnet publish $NUGET_SOURCES -c Release -r linux-x64 -o /out \
     && rm -f /out/NLog.config
-
-WORKDIR /out/ClientApp
-RUN npm install
-WORKDIR /build
 
 # actual target image
 FROM 739861173471.dkr.ecr.us-west-2.amazonaws.com/baseimage/core:stable
@@ -38,6 +34,10 @@ ENV APPLICATION=$app
 # copy app from build-env
 RUN echo "current directory `pwd`"
 COPY --from=build-env /out .
+
+WORKDIR /out/ClientApp
+RUN npm install
+WORKDIR /build
 
 # add custom nginx config
 COPY .docker/nginx-lpt.conf /etc/nginx/conf.d/lpt.conf
