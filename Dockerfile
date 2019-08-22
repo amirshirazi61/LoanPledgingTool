@@ -9,6 +9,8 @@ ARG NUGET_SOURCES="--source https://api.nuget.org/v3/index.json"
 WORKDIR /build
 COPY . ./
 
+ENV NODE_ENV=production
+
 # we need nodejs for npm, attempt to install
 # XXX we need to not randomly download a bash file and run it, fix this eventually...
 RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
