@@ -18,13 +18,9 @@ RUN apt-get install -y nodejs
 RUN dotnet publish $NUGET_SOURCES -c Release -r linux-x64 -o /out \
     && rm -f /out/NLog.config
 
-ENV TEMP=`pwd`
-run echo `pwd`
-RUN cd /out/ClientApp
-run echo `pwd`
+WORKDIR /out/ClientApp
 RUN npm install
-RUN cd $TEMP
-RUN echo `pwd`
+WORKDIR /build
 
 # actual target image
 FROM 739861173471.dkr.ecr.us-west-2.amazonaws.com/baseimage/core:stable
