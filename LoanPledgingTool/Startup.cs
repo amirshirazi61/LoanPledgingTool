@@ -101,10 +101,10 @@ namespace LoanPledgingTool
             {
                 spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsEnvironment("Local"))
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
+                //if (env.IsDevelopment())
+                //{
+                //    spa.UseReactDevelopmentServer(npmScript: "start");
+                //}
             });
         }
 
