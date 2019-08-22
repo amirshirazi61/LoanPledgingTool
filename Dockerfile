@@ -14,6 +14,8 @@ COPY . ./
 RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
 RUN apt-get install -y nodejs
 
+RUN npm install
+
 # compile/package the app
 RUN dotnet publish $NUGET_SOURCES -c Release -r linux-x64 -o /out \
     && rm -f /out/NLog.config
