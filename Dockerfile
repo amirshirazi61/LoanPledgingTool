@@ -20,7 +20,7 @@ RUN apt-get install -y nodejs
 RUN dotnet publish $NUGET_SOURCES -c Release -r linux-x64 -o /out \
     && rm -f /out/NLog.config
 
-WORKDIR /out/ClientApp
+WORKDIR /out/ClientApp/build
 RUN npm audit fix
 WORKDIR /build
 
